@@ -1,0 +1,15 @@
+{% extends "layout.html.j2" %}
+{% block content %}
+	{% include "basic_header.html.j2" %}
+	<div class="col-12 text-secondary mt-2">
+		Insert your antiSMASH job ID:
+		<br />
+		<div class="input-group mb-3 w-50">
+		  <input type="text" class="form-control" placeholder="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-label="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-describedby="basic-addon2">
+		  <div class="input-group-append">
+		    <button class="btn btn-outline-info" type="button">Submit</button>
+		    <button class="btn btn-outline-info" type="button">Load example</button>
+		  </div>
+		</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "layout.html.j2" %}
+{% block content %}
+	{% include "basic_header.html.j2" %}
+	<!-- for javascript -->
+	<input type="hidden" id="dataset_id" value="{{ dataset_id }}"/>
+	<!-- Browse -->
+	{% include "dataset/browse.html.j2" %}
+{% endblock %}

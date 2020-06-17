@@ -1,0 +1,15 @@
+{% extends "layout.html.j2" %}
+{% block content %}
+	{% include "basic_header.html.j2" %}
+	<div class="col-12 text-secondary mt-2">
+		Got a question regarding or related to the database?
+	    feel free to <a href='mailto:satria.kautsar@wur.nl,marnix.medema@wur.nl?subject=[BiG-FAM HELP]&body=Dear BiG-SLiCE maintainers,'>
+	    drop us an e-mail</a> (please put <strong>
+	    [BiG-FAM HELP]</strong> on the subject).
+	     Be sure to first check these
+	     <strong><a href='#help_faq'>Frequently Asked Questions</a></strong>
+	     to see if your question is already answered there.
+	 </div>
+	<!-- FAQs -->
+	{% include "help/faq.html.j2" %}
+{% endblock %}

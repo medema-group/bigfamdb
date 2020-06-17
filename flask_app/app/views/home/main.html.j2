@@ -1,0 +1,42 @@
+{% extends "layout.html.j2" %}
+{% block content %}
+	{% include "basic_header.html.j2" %}
+	<div class="col-12 text-secondary mt-2">
+		The Biosynthetic Gene Cluster Family (BiG-FAM) database yada yada yada... (aim of the database)
+	</div>
+	<div class="col-12 text-secondary mt-2">
+		<p>
+			This database version (v{{ g["version"] }}) contain homology analysis result of {{ bgc_total }} BGCs taken from multiple publicly available sources (<a href="/stats#input_data">details</a>).
+			The large-scale analysis was performed using <a href="https://github.com/medema-group/bigslice">BiG-SLiCE software (v1.0.0)</a> using an arbitrary clustering threshold (T={{ threshold }}),
+			which resulted in the construction of {{ gcf_total }} GCF models, each represents distinctly shared protein domain & sequence features of "homologous" group of BGCs
+			(<strong>please read these <a href="#">important caveats</a></strong> before working with the data).
+		</p>
+	</div>
+	<div class="col-12">
+		<div class="row">
+			<div class="col-6 text-right">
+				<img src="{{ url_for('static', filename='img/phylo_tree_bigfam.png') }}" class="img-fluid w-75">
+			</div>
+			<div class="col-6 text-left">
+				<a href="">
+					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
+						<h1><strong>Explore</strong></h1>
+						<span>the GCFs and their member BGCs</span>
+					</div>
+				</a>
+				<a href="">
+					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
+						<h1><strong>Query</strong></h1>
+						<span>a finished antiSMASH job</span>
+					</div>
+				</a>
+				<a href="">
+					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
+						<h1><strong>Statistics</strong></h1>
+						<span>of the database</span>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}
