@@ -9,3 +9,4 @@ conf = {
 }
 
 conf["db_path"] = path.join(conf["instance_folder"], "data.db")
+conf["jobs_db_path"] = path.join(conf["instance_folder"], "bigfam_jobs.db")

@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS status_enum (
+	code INTEGER UNIQUE NOT NULL,
+	name VARCHAR(30) UNIQUE NOT NULL
+);
+INSERT OR IGNORE INTO status_enum VALUES(-1, 'FAILED');
+INSERT OR IGNORE INTO status_enum VALUES(0, 'PENDING');
+INSERT OR IGNORE INTO status_enum VALUES(1, 'DOWNLOADING');
+INSERT OR IGNORE INTO status_enum VALUES(2, 'PROCESSING');
+INSERT OR IGNORE INTO status_enum VALUES(3, 'PROCESSED');
+
+CREATE TABLE IF NOT EXISTS jobs (
+	name VARCHAR(50) UNIQUE NOT NULL,
+	submitted DATETIME NOT NULL,
+	started DATETIME,
+	finished DATETIME,
+	status INTEGER NOT NULL,
+	FOREIGN KEY(status) REFERENCES status_enum(code)
+);
+CREATE INDEX IF NOT EXISTS jobs_started ON jobs(started);
+CREATE INDEX IF NOT EXISTS jobs_finished ON jobs(finished);
+CREATE INDEX IF NOT EXISTS jobs_name ON jobs(name);
+CREATE INDEX IF NOT EXISTS jobs_status ON jobs(status, started);
