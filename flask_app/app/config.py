@@ -3,7 +3,9 @@ from os import path
 
 # path to result folder
 conf = {
-    "result_folder": path.join(path.dirname(__file__), "..", "result")
+    "instance_folder": path.join(
+        path.dirname(__file__), "..", "..", "instance"
+    )
 }
 
-conf["db_path"] = path.join(conf["result_folder"], "data.db")
+conf["db_path"] = path.join(conf["instance_folder"], "data.db")
