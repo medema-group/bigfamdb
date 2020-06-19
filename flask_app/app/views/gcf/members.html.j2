@@ -242,10 +242,11 @@
 						let bgcObject = response[bgc_id];
 						bgcObject["orfs"].forEach(function(cds) {
 							cds["domains"].forEach(function(domain) {
-								if (!domainColors.hasOwnProperty(domain.code)) {
-									domainColors[domain.code] = getRandomColor(0.5);
+								let domCore = domain.code.split(" [")[0];
+								if (!domainColors.hasOwnProperty(domCore)) {
+									domainColors[domCore] = getRandomColor(0.5);
 								}
-								domain["color"] = domainColors[domain.code];
+								domain["color"] = domainColors[domCore];
 							});
 						});
 						$(arrower_container).html(Arrower.drawClusterSVG(bgcObject, height=30));
