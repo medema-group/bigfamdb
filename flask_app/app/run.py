@@ -66,5 +66,6 @@ def inject_global():
 
     return dict(
         g=g,
-        nav_items=nav_items
+        nav_items=nav_items,
+        last_run_id=last_run_id
     )

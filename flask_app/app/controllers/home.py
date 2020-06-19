@@ -16,8 +16,8 @@ def page_home():
 
     with sqlite3.connect(conf["db_path"]) as con:
         cur = con.cursor()
-        clustering_id, threshold = cur.execute((
-            "select clustering.id, clustering.threshold"
+        run_id, clustering_id, threshold = cur.execute((
+            "select run.id, clustering.id, clustering.threshold"
             " from run,clustering"
             " where run.status >= 7"
             " and run.id=clustering.run_id"
@@ -25,13 +25,17 @@ def page_home():
             " limit 1"
         )).fetchall()[0]
 
-        bgc_total, gcf_total = cur.execute((
-            "select count(bgc_id), count(gcf_id)"
-            " from gcf_membership,gcf"
-            " where gcf_membership.gcf_id=gcf.id"
-            " and gcf.clustering_id=?"
-            " and gcf_membership.rank=0"
-        ), (clustering_id, )).fetchall()[0]
+        bgc_total = cur.execute((
+            "select count(bgc_id)"
+            " from run_bgc_status"
+            " where run_id=?"
+        ), (run_id, )).fetchall()[0][0]
+
+        gcf_total = cur.execute((
+            "select count(id)"
+            " from gcf"
+            " where clustering_id=?"
+        ), (clustering_id, )).fetchall()[0][0]
 
     # page title
     page_title = "Welcome to the BiG-FAM database!"
