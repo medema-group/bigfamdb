@@ -5,8 +5,9 @@ from os import path
 conf = {
     "instance_folder": path.join(
         path.dirname(__file__), "..", "..", "instance"
-    )
+    ),
+    "example_query_id": "bacteria-7595694e-09aa-4fc3-8902-59e6d11c1a4a"
 }
 
-conf["db_path"] = path.join(conf["instance_folder"], "data.db")
+conf["db_path"] = path.join(conf["instance_folder"], "result", "data.db")
 conf["jobs_db_path"] = path.join(conf["instance_folder"], "bigfam_jobs.db")

@@ -24,5 +24,6 @@ def page_query():
     return render_template(
         "query/main.html.j2",
         page_title=page_title,
-        page_subtitle=page_subtitle
+        page_subtitle=page_subtitle,
+        example_query_id=conf["example_query_id"]
     )

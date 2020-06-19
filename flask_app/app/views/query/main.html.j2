@@ -5,10 +5,10 @@
 		Insert your antiSMASH job ID:
 		<br />
 		<div class="input-group mb-3 w-50">
-		  <input type="text" class="form-control" placeholder="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-label="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-describedby="basic-addon2">
+		  <input id="input_query_id" type="text" class="form-control" placeholder="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-label="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-describedby="basic-addon2">
 		  <div class="input-group-append">
 		    <button class="btn btn-outline-info" type="button">Submit</button>
-		    <button class="btn btn-outline-info" type="button">Load example</button>
+		    <button class="btn btn-outline-info" type="button" onclick="javascript:$('#input_query_id').val('{{ example_query_id }}')">Load example</button>
 		  </div>
 		</div>
     </div>
