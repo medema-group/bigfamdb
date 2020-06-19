@@ -42,9 +42,26 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
         )
         print("downloading {}...".format(query_input))
         with TemporaryDirectory() as temp_dir:
+            if name.startswith("bacteria-"):
+                as_type = "antismash"
+            elif name.startswith("fungi-"):
+                as_type = "fungismash"
+            else:
+                # update status to "FAILED"
+                with db_open(jobs_db) as con:
+                    cur = con.cursor()
+                    cur.execute((
+                        "update jobs"
+                        " set status=?, started=?,"
+                        " comment=?"
+                        " where name like ?"
+                    ), (-1, datetime.now(), "unknown_as_type", name))
+                    con.commit()
+                print("unknown job id!")
+                return 1
             antismash_url = (
-                "https://antismash.secondarymetabolites.org/upload/{}/"
-            ).format(name)
+                "https://{}.secondarymetabolites.org/upload/{}/"
+            ).format(as_type, name)
             commands = [
                 "wget",
                 "-nd",
@@ -72,9 +89,10 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                     cur = con.cursor()
                     cur.execute((
                         "update jobs"
-                        " set status=?, started=?"
+                        " set status=?, started=?,"
+                        " comment=?"
                         " where name like ?"
-                    ), (-1, datetime.now(), name))
+                    ), (-1, datetime.now(), "download_failed", name))
                     con.commit()
                 print("download failed!")
                 return 1
@@ -119,9 +137,10 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                 cur = con.cursor()
                 cur.execute((
                     "update jobs"
-                    " set status=?, started=?"
+                    " set status=?, started=?,"
+                    " comment=?"
                     " where name like ?"
-                ), (-1, datetime.now(), name))
+                ), (-1, datetime.now(), "query_failed", name))
                 con.commit()
             print("run failed!")
             return 1

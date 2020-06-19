@@ -14,9 +14,11 @@ CREATE TABLE IF NOT EXISTS jobs (
 	started DATETIME,
 	finished DATETIME,
 	status INTEGER NOT NULL,
+	comment VARCHAR(50),
 	FOREIGN KEY(status) REFERENCES status_enum(code)
 );
 CREATE INDEX IF NOT EXISTS jobs_started ON jobs(started);
 CREATE INDEX IF NOT EXISTS jobs_finished ON jobs(finished);
 CREATE INDEX IF NOT EXISTS jobs_name ON jobs(name);
 CREATE INDEX IF NOT EXISTS jobs_status ON jobs(status, started);
+CREATE INDEX IF NOT EXISTS jobs_comment ON jobs(comment, started);
