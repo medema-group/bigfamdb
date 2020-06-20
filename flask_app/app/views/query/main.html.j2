@@ -1,15 +1,47 @@
 {% extends "layout.html.j2" %}
 {% block content %}
 	{% include "basic_header.html.j2" %}
-	<div class="col-12 text-secondary mt-2">
-		Insert your antiSMASH job ID:
-		<br />
-		<div class="input-group mb-3 w-50">
-		  <input id="input_query_id" type="text" class="form-control" placeholder="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-label="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-describedby="basic-addon2">
-		  <div class="input-group-append">
-		    <button class="btn btn-outline-info" type="button">Submit</button>
-		    <button class="btn btn-outline-info" type="button" onclick="javascript:$('#input_query_id').val('{{ example_query_id }}')">Load example</button>
-		  </div>
-		</div>
-    </div>
+	<div class="row">
+		<div class="col-8 text-secondary mt-2">
+			Insert your antiSMASH job ID:
+			<br />
+			<div class="input-group mb-3 w-100">
+			  <input id="input_query_id" type="text" class="form-control" placeholder="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-label="taxon-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" aria-describedby="basic-addon2">
+			  <div class="input-group-append">
+			    <button id="input_query_submit" class="btn btn-outline-info" type="button">Submit</button>
+			    <button class="btn btn-outline-info" type="button" onclick="javascript:$('#input_query_id').val('{{ example_query_id }}')">Load example</button>
+			  </div>
+			</div>
+	    </div>
+	</div>
+	<div class="row">
+		<div class="col-8 text-secondary">
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Pending
+					<span class="badge badge-secondary badge-pill">{{ pending }}</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Processing
+					<span class="badge badge-info badge-pill">{{ processing }}</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					Processed
+					<span class="badge badge-success badge-pill">{{ processed }}</span>
+				</li>
+			</ul>
+	    </div>
+	</div>
+    <script type="text/javascript">
+      $(function () {
+      	$("#input_query_submit").click(function() {
+	      	let job_id = $('#input_query_id').val();
+	      	if (job_id.match(/^(bacteria|fungi).+$/)) {
+	      		$(location).attr('href', '/query/submit/' + job_id);
+	      	} else {
+	      		showModal("Alert", "Wrong antiSMASH job ID.");
+	      	}
+      	});
+      });
+    </script>
 {% endblock %}

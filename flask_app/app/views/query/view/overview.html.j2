@@ -1,0 +1,24 @@
+<div class="row mt-2 mb-4">
+	<div class="col">
+		<h3>Overview</h3>
+		<!-- first row -->
+		<div class="row mt-4 list-group list-group-horizontal">
+			<div class="col-1"></div>
+			<div class="col-5 list-group-item d-flex justify-content-between align-items-center">
+				Query submitted:
+				<span id="query_overview_run_id">
+					<span class="badge badge-secondary badge-pill">
+						{{ submitted }}
+					</span>
+				</span>
+			</div>
+			<div class="col-5 list-group-item d-flex justify-content-between align-items-center">
+				Status:
+				<span id="query_overview_threshold" class="badge badge-secondary badge-pill">
+					{{ status_name }}
+				</span>
+			</div>
+			<div class="col-1"></div>
+		</div>
+	</div>
+</div>

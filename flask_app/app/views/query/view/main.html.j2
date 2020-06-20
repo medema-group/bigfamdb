@@ -1,0 +1,18 @@
+{% extends "layout.html.j2" %}
+{% block content %}
+	{% include "basic_header.html.j2" %}
+	<!-- for javascript -->
+	<input type="hidden" id="report_id" value="{{ report_id }}"/>
+	<input type="hidden" id="run_id" value="{{ run_id }}"/>
+	<input type="hidden" id="clustering_id" value="{{ clustering_id }}"/>
+	<input type="hidden" id="threshold" value="{{ threshold }}"/>
+	<input type="hidden" id="job_id" value="{{ job_id }}"/>
+	<!-- Overview -->
+	{% include "query/view/overview.html.j2" %}
+	{% if status == 3 %}
+		<!-- Browse -->
+		{% include "query/view/browse.html.j2" %}
+	{% else %}
+		{% include "query/view/waiting.html.j2" %}
+	{% endif %}
+{% endblock %}
