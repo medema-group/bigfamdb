@@ -55,7 +55,7 @@
 	$(document).ready(function(){
 	// fetch and update tables
 	$.get({
-		url: "/api/run/get_overview",
+		url: "{{ url_for('root.page') }}api/run/get_overview",
 		data: {
 			"run_id": $("#run_id").val()
 		},

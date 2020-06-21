@@ -30,7 +30,7 @@
 			responsive: true,
 			serverSide: true,
 			ajax: {
-				url: "/api/query/bgc_list",
+				url: "{{ url_for('root.page') }}api/query/bgc_list",
 				type: "GET",
 				data: {
 					"report_id": $("#report_id").val(),
@@ -52,13 +52,13 @@
 				{
 					"targets": 4, // gcf
 					render: function(data, type, row, meta) {
-						return "<a class='btn btn-info' href='/run/" + meta.settings.json.run_id + "/gcf/" + data[0] + "'>" + data[1] + "</a>";
+						return "<a class='btn btn-info' href='{{ url_for('root.page') }}run/" + meta.settings.json.run_id + "/gcf/" + data[0] + "'>" + data[1] + "</a>";
 					}
 				},
 				{
 					"targets": 6, // details
 					render: function(data, type, row, meta) {
-						return "<a href='/query/view/" + $("#job_id").val() + "/bgc/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
+						return "<a href='{{ url_for('root.page') }}query/view/" + $("#job_id").val() + "/bgc/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
 					}
 				},
 				{ className: "text-right", "targets": [2, 5] },

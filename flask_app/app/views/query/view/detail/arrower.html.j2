@@ -37,7 +37,7 @@
 				// query
 				$("#modal-window .modal-dialog").css("max-width", "90vw");
 				$.get({
-					url: "/api/query/detail/get_arrower_objects",
+					url: "{{ url_for('root.page') }}api/query/detail/get_arrower_objects",
 					data: {
 						"bgc_id": $("#bgc_id").val(),
 						"report_id": $("#report_id").val()
@@ -60,7 +60,7 @@
 				});
 				// targets
 				$.get({
-					url: "/api/bgc/get_arrower_objects",
+					url: "{{ url_for('root.page') }}api/bgc/get_arrower_objects",
 					data: {
 						"bgc_id": target_bgc_ids.join(","),
 						"run_id": $("#run_id").val()

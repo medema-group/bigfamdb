@@ -44,7 +44,7 @@
 			$(document).ready(function(){
 				// fetch and update BGC arrower on annotation page
 				$.get({
-					url: "/api/query/detail/get_arrower_objects",
+					url: "{{ url_for('root.page') }}api/query/detail/get_arrower_objects",
 					data: {
 						"bgc_id": $("#bgc_id").val(),
 						"report_id": $("#report_id").val()
@@ -65,7 +65,7 @@
 				});
 				// fetch and update word cloud
 				$.get({
-					url: "/api/query/detail/get_word_cloud",
+					url: "{{ url_for('root.page') }}api/query/detail/get_word_cloud",
 					data: {
 						"bgc_id": $("#bgc_id").val(),
 						"report_id": $("#report_id").val(),
@@ -87,7 +87,7 @@
 					serverSide: true,
 					responsive: true,
 					ajax: {
-						url: "/api/query/detail/get_genes_table",
+						url: "{{ url_for('root.page') }}api/query/detail/get_genes_table",
 						type: "GET",
 						data: {
 							"bgc_id": $("#bgc_id").val(),

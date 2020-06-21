@@ -86,7 +86,7 @@
 			serverSide: true,
 			responsive: true,
 			ajax: {
-				url: "/api/gcf/get_members",
+				url: "{{ url_for('root.page') }}api/gcf/get_members",
 				type: "GET",
 				data: {
 					"gcf_id": $("#gcf_id").val(),
@@ -98,13 +98,13 @@
 				{
 					"targets": 0, // dataset
 					render: function(data, type, row, meta) {
-						return "<a class='btn btn-info' href='/dataset/" + data[0] + "'>" + data[1] + "</a>";
+						return "<a class='btn btn-info' href='{{ url_for('root.page') }}dataset/" + data[0] + "'>" + data[1] + "</a>";
 					}
 				},
 				{
 					"targets": 2, // bgc_name
 					render: function(data, type, row, meta) {
-						return "<a class='btn btn-info' href='/dataset/" + data[1] + "/bgc/" + data[0] + "/run/" + meta.settings.json.run_id + "'>" + data[2] + "</a>";
+						return "<a class='btn btn-info' href='{{ url_for('root.page') }}dataset/" + data[1] + "/bgc/" + data[0] + "/run/" + meta.settings.json.run_id + "'>" + data[2] + "</a>";
 					}
 				},
 				{
@@ -190,7 +190,7 @@
 			serverSide: true,
 			scrollX: true,
 			ajax: {
-				url: "/api/gcf/get_member_list_arower",
+				url: "{{ url_for('root.page') }}api/gcf/get_member_list_arower",
 				type: "GET",
 				data: {
 					"gcf_id": $("#gcf_id").val(),
@@ -201,13 +201,13 @@
 				{
 					"targets": 0, // dataset name
 					render: function(data, type, row, meta) {
-						return "<a class='btn btn-info' href='/dataset/" + data[0] + "'>" + data[1] + "</a>";
+						return "<a class='btn btn-info' href='{{ url_for('root.page') }}dataset/" + data[0] + "'>" + data[1] + "</a>";
 					}
 				},
 				{
 					"targets": 1, // bgc name
 					render: function(data, type, row, meta) {
-						return "<a class='btn btn-info' href='/dataset/" + data[2] + "/bgc/" + data[0] + "/run/" + meta.settings.json.run_id + "'>" + data[1] + "</a>";
+						return "<a class='btn btn-info' href='{{ url_for('root.page') }}dataset/" + data[2] + "/bgc/" + data[0] + "/run/" + meta.settings.json.run_id + "'>" + data[1] + "</a>";
 					}
 				},
 				{
@@ -232,7 +232,7 @@
 			    let arrower_container = $(row).find(".arrower_container")[0];
 			    let bgc_id = parseInt(arrower_container.dataset.bgc_id);
 			    $.get({
-					url: "/api/bgc/get_arrower_objects",
+					url: "{{ url_for('root.page') }}api/bgc/get_arrower_objects",
 					data: {
 						"bgc_id": bgc_id,
 						"run_id": $("#run_id").val()

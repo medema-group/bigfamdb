@@ -12,7 +12,7 @@
 	</div>
 	<div class="col-12 text-secondary mt-2">
 		<p>
-			This database version (v{{ g["version"] }}) contain homology analysis result of <strong>{{ bgc_total }} BGCs</strong> taken from multiple publicly available sources (<a href="/stats#input_data">details</a>).
+			This database version (v{{ g["version"] }}) contain homology analysis result of <strong>{{ bgc_total }} BGCs</strong> taken from multiple publicly available sources (<a href="{{ url_for('root.page') }}stats#input_data">details</a>).
 			The large-scale analysis was performed using <a href="https://github.com/medema-group/bigslice">BiG-SLiCE software (v1.0.0)</a> with an arbitrary clustering threshold (<strong>T={{ threshold }}</strong>),
 			which resulted in the construction of <strong>{{ gcf_total }} GCF models</strong>, each represents distinct protein domain & sequence features shared by the BGCs.
 		</p>
@@ -41,19 +41,19 @@
 				<img src="{{ url_for('static', filename='img/phylo_tree_bigfam.png') }}" class="img-fluid w-75">
 			</div>
 			<div class="col-6 text-left">
-				<a href="/run/{{ last_run_id }}">
+				<a href="{{ url_for('root.page') }}run/{{ last_run_id }}">
 					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
 						<h1><strong>Explore</strong></h1>
 						<span>the GCFs and their member BGCs</span>
 					</div>
 				</a>
-				<a href="/query">
+				<a href="{{ url_for('root.page') }}query">
 					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
 						<h1><strong>Query</strong></h1>
 						<span>a finished antiSMASH job</span>
 					</div>
 				</a>
-				<a href="/stats">
+				<a href="{{ url_for('root.page') }}stats">
 					<div class="btn btn-secondary w-50 ml-4 mt-4 pt-4 pb-4">
 						<h1><strong>Statistics</strong></h1>
 						<span>of the database</span>

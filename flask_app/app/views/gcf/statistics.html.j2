@@ -45,7 +45,7 @@
 	$(document).ready(function(){
 		// fetch and update statistics
 		$.get({
-			url: "/api/gcf/get_stats",
+			url: "{{ url_for('root.page') }}api/gcf/get_stats",
 			data: {
 				"gcf_id": $("#gcf_id").val()
 			},
@@ -57,7 +57,7 @@
 		});
 		// fetch and render bgc class pie chart
 		$.get({
-			url: "/api/gcf/get_class_counts",
+			url: "{{ url_for('root.page') }}api/gcf/get_class_counts",
 			data: {
 				"gcf_id": $("#gcf_id").val()
 			},
@@ -96,7 +96,7 @@
 		});
 		// fetch and render bgc taxon pie chart
 		$.get({
-			url: "/api/gcf/get_taxon_counts",
+			url: "{{ url_for('root.page') }}api/gcf/get_taxon_counts",
 			data: {
 				"gcf_id": $("#gcf_id").val()
 			},
@@ -136,7 +136,7 @@
 		let bin_size = 10000; // base pairs
 		let max_bgc_length = 100000; // only show detailed bars for bgc < this length
 		$.get({
-			url: "/api/gcf/get_bgclength_hist",
+			url: "{{ url_for('root.page') }}api/gcf/get_bgclength_hist",
 			data: {
 				"gcf_id": $("#gcf_id").val(),
 				"bin_size": bin_size

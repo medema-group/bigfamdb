@@ -44,7 +44,7 @@
 			serverSide: true,
 			responsive: true,
 			ajax: {
-				url: "/api/run/get_gcf_table",
+				url: "{{ url_for('root.page') }}api/run/get_gcf_table",
 				type: "GET",
 				data: {
 					"run_id": $("#run_id").val()
@@ -84,7 +84,7 @@
 				{
 					"targets": 5, // details
 					render: function(data, type, row, meta) {
-						return "<a href='/run/" + meta.settings.json.run_id + "/gcf/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
+						return "<a href='{{ url_for('root.page') }}run/" + meta.settings.json.run_id + "/gcf/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
 					}
 				},
 				{ className: "text-right", "targets": [1, 2] },

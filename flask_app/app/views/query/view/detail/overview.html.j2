@@ -36,7 +36,7 @@
 	$(document).ready(function(){
 		// fetch and update tables
 		$.get({
-			url: "/api/query/detail/overview",
+			url: "{{ url_for('root.page') }}api/query/detail/overview",
 			data: {
 				"bgc_id": $("#bgc_id").val(),
 				"report_id": $("#report_id").val(),

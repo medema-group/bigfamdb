@@ -36,7 +36,7 @@
 			on_show=function(){
 				$("#modal-window .modal-dialog").css("max-width", "90vw");
 				$.get({
-					url: "/api/bgc/get_arrower_objects",
+					url: "{{ url_for('root.page') }}api/bgc/get_arrower_objects",
 					data: {
 						"bgc_id": target_bgc_ids.concat([query_bgc_id]).join(","),
 						"run_id": $("#run_id").val()

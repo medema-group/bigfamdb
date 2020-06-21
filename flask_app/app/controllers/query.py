@@ -3,6 +3,7 @@
 import sqlite3
 import math
 from flask import render_template, redirect, request
+from flask import url_for
 from os import path
 from datetime import datetime
 
@@ -86,7 +87,7 @@ def page_submit(job_id):
                 )
 
     # render view
-    return redirect("/query/view/" + job_id)
+    return redirect(url_for("query.page_view", job_id=job_id))
 
 
 @blueprint.route("/query/view/<string:job_id>")

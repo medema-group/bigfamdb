@@ -2,11 +2,9 @@
 
 import sqlite3
 from flask import render_template, request, redirect
-from flask import abort
-import json
+from flask import url_for
 import math
 from os import path
-from typing import List
 
 # import global config
 from ..config import conf
@@ -18,7 +16,12 @@ blueprint = Blueprint('bgc', __name__)
 
 @blueprint.route("/dataset/<int:dataset_id>/bgc/<int:bgc_id>")
 def page_bgc_no_run(dataset_id, bgc_id):
-    return redirect("/dataset/{}/bgc/{}/run/0".format(dataset_id, bgc_id))
+    return redirect(url_for(
+        "bgc.page_bgc",
+        dataset_id=dataset_id,
+        bgc_id=bgc_id,
+        run_id=0)
+    )
 
 
 @blueprint.route("/dataset/<int:dataset_id>/bgc/<int:bgc_id>/run/<int:run_id>")
@@ -48,8 +51,12 @@ def page_bgc(dataset_id, bgc_id, run_id):
             )).fetchall()[0][0]
             redir = True
         if redir:
-            return redirect("/dataset/{}/bgc/{}/run/{}".format(
-                dataset_id, bgc_id, run_id))
+            return redirect(url_for(
+                "bgc.page_bgc",
+                dataset_id=dataset_id,
+                bgc_id=bgc_id,
+                run_id=run_id)
+            )
 
         # fetch bgc_name, dataset_name
         bgc_name, dataset_name = cur.execute((

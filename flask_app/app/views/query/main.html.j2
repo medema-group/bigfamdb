@@ -37,7 +37,7 @@
       	$("#input_query_submit").click(function() {
 	      	let job_id = $('#input_query_id').val();
 	      	if (job_id.match(/^(bacteria|fungi).+$/)) {
-	      		$(location).attr('href', '/query/submit/' + job_id);
+	      		$(location).attr('href', '{{ url_for("root.page") }}query/submit/' + job_id);
 	      	} else {
 	      		showModal("Alert", "Wrong antiSMASH job ID.");
 	      	}

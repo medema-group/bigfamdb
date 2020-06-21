@@ -78,7 +78,7 @@
 	$(document).ready(function(){
 		// fetch and update tables
 		$.get({
-			url: "/api/bgc/get_overview",
+			url: "{{ url_for('root.page') }}api/bgc/get_overview",
 			data: {
 				"bgc_id": $("#bgc_id").val()
 			},

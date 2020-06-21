@@ -51,7 +51,7 @@
 					serverSide: true,
 					responsive: true,
 					ajax: {
-						url: "/api/query/detail/get_gcf_hits_table",
+						url: "{{ url_for('root.page') }}api/query/detail/get_gcf_hits_table",
 						type: "GET",
 						data: {
 							"bgc_id": $("#bgc_id").val(),
@@ -93,7 +93,7 @@
 						{
 							"targets": 1, // name
 							render: function(data, type, row, meta) {
-								return "<a class='btn btn-info' href='/run/" + meta.settings.json.run_id + "/gcf/" + data[0] + "'>" + data[1] + "</a>";
+								return "<a class='btn btn-info' href='{{ url_for('root.page') }}run/" + meta.settings.json.run_id + "/gcf/" + data[0] + "'>" + data[1] + "</a>";
 							}
 						},
 						{ className: "text-right", "targets": [0, 2] },

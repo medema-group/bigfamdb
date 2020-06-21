@@ -39,7 +39,7 @@
 			serverSide: true,
 						responsive: true,
 			ajax: {
-				url: "/api/dataset/get_bgc_table",
+				url: "{{ url_for('root.page') }}/api/dataset/get_bgc_table",
 				type: "GET",
 				data: {
 					"dataset_id": $("#dataset_id").val()
@@ -91,7 +91,7 @@
 				{
 					"targets": 8, // details
 					render: function(data, type, row, meta) {
-						return "<a href='/dataset/" + meta.settings.json.dataset_id + "/bgc/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
+						return "<a href='{{ url_for('root.page') }}dataset/" + meta.settings.json.dataset_id + "/bgc/" + data + "'><button type='button' class='btn btn-sm btn-info'>view</button></a>";
 					}
 				},
 			{ className: "text-right", "targets": [5, 6] },

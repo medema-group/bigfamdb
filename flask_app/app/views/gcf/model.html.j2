@@ -27,7 +27,7 @@
 	$(document).ready(function(){
 		// fetch and update word cloud
 		$.get({
-			url: "/api/gcf/get_word_cloud",
+			url: "{{ url_for('root.page') }}api/gcf/get_word_cloud",
 			data: {
 				"gcf_id": $("#gcf_id").val(),
 				"limit": 30
@@ -45,7 +45,7 @@
 		let bin_size = 50; // dists
 		let max_dist_show = 1000; // only show detailed bars for dist < this value
 		$.get({
-			url: "/api/gcf/get_dist_stats",
+			url: "{{ url_for('root.page') }}api/gcf/get_dist_stats",
 			data: {
 				"gcf_id": $("#gcf_id").val(),
 				"bin_size": bin_size,
