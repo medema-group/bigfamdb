@@ -1,7 +1,10 @@
 {% extends "layout.html.j2" %}
 {% block content %}
 	{% include "basic_header.html.j2" %}
-	<div class="col-12 text-secondary mt-2">
-		(...)
-    </div>
+	<!-- overview -->
+	{% include "stats/overview.html.j2" %}
+	<!-- BGC -->
+	{% include "stats/bgc.html.j2" %}
+	<!-- GCF -->
+	{% include "stats/gcf.html.j2" %}
 {% endblock %}
