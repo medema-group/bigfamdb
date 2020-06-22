@@ -3,31 +3,30 @@
 	{% include "basic_header.html.j2" %}
 	<div class="col-12 text-secondary mt-2">
 		<p>
-			The Biosynthetic Gene Cluster Family (GCF) database is an online repository for "homologous" group of BGCs sharing similar biosynthetic make-ups.
-			With the large-scale, global collection of BGCs identified from currently available genomes and MAGs as a source,
-			these GCFs can be used to chart an <strong>explorable "atlas" of microbial secondary metabolic diversity</strong>.
-			BiG-FAM facilitates the <strong>query of putative BGCs</strong>, rapidly find their respective position in the map
-			and gain a better understanding on their novelty or (probable) functions.
+			The Biosynthetic Gene Cluster Family (GCF) database is an online repository for "homologous" groups of biosynthetic gene clusters (BGCs) putatively encoding the production of similar specialized metabolites. By taking large-scale, global collections of BGCs identified from currently available genomes and MAGs as a data source, BiG-FAM provides an <strong>explorable "atlas" of microbial secondary metabolic diversity</strong> to browse and search biosynthetic diversity across taxa.
+			BiG-FAM facilitates <strong>querying putative BGCs</strong> to rapidly find their position on the diversity map and gain a better understanding of their novelty or (probable) functions, based on relationships with other known and predicted BGCs from publicly available data.
 		</p>
 	</div>
 	<div class="col-12 text-secondary mt-2">
 		<p>
-			This database version (v{{ g["version"] }}) contain homology analysis result of <strong>{{ bgc_total }} BGCs</strong> taken from multiple publicly available sources (<a href="{{ url_for('root.page') }}stats#input_data">details</a>).
-			The large-scale analysis was performed using <a href="https://github.com/medema-group/bigslice">BiG-SLiCE software (v1.0.0)</a> with an arbitrary clustering threshold (<strong>T={{ threshold }}</strong>),
-			which resulted in the construction of <strong>{{ gcf_total }} GCF models</strong>, each represents distinct protein domain & sequence features shared by the BGCs.
+			This database version ({{ g["version"] }}) is based on a GCF clustering of <strong>{{ bgc_total }} BGCs</strong> taken from multiple publicly available sources (<a href="{{ url_for('root.page') }}stats#input_data">details</a>).
+			This large-scale analysis was performed using the <a href="https://github.com/medema-group/bigslice">BiG-SLiCE software (1.0.0)</a> with an arbitrary clustering threshold (<strong>T={{ threshold }}</strong>),
+			which resulted in the construction of <strong>{{ gcf_total }} GCF models</strong>, each representing distinct protein domain and sequence features shared by the BGCs.
 		</p>
 	</div>
 	<div class="col-12 text-secondary mt-2">
 		<p>
 			<strong>
 				Please read these
-				<a href="javascript:void();" class="" data-trigger="hover" data-html="true" data-toggle="popover"
+				<a href="javascript:void();" class="" data-trigger="click" data-html="true" data-toggle="popover"
 				data-content="
-				It is to be noted that the GCFs should not be taken as a hard representative of a specific 'compound family'.<br/>
-				Due to the complex nature of secondary metabolic pathways (i.e. the same compound can be produced by<br/>
-				multiple different BGCs, and vice versa), it is simply impossible to set a single clustering threshold to 'catch<br/>
-				them all'. Therefore, this database should be treated as an <strong>exploratory</strong> rather than a prediction (classification)<br/>
-				tool."
+				It should be noted that the GCFs should not be taken as an absolute representation<br />
+				of specific 'compound families'. Due to the complex nature of secondary metabolic<br />
+				pathways (e.g., the same compound can be produced by multiple different BGCs, and<br />
+				vice versa), it is impossible to set a single clustering threshold that groups<br />
+				diverse types of BGCs in groups that reflect their chemical similarity in exactly<br />
+				the same way (if this can be measured at all). Therefore, <strong>this database should be<br />
+				treated as an exploratory rather than a prediction (classification) tool.</strong>"
 				title="Important note for BiG-FAM users">
 					important caveats
 				</a>

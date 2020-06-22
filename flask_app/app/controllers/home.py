@@ -49,6 +49,6 @@ def page_home():
         page_title=page_title,
         page_subtitle=page_subtitle,
         threshold=threshold,
-        bgc_total=bgc_total,
-        gcf_total=gcf_total
+        bgc_total="{:,}".format(bgc_total),
+        gcf_total="{:,}".format(gcf_total)
     )
