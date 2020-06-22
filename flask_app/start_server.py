@@ -85,7 +85,7 @@ def create_flask_app():
 
 if __name__ == "__main__":
 
-    if len(argv) > 2:
+    if len(argv) > 1:
         port = int(argv[1])
     else:
         port = 5000
