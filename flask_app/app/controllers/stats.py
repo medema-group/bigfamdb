@@ -80,10 +80,26 @@ def get_dataset_table():
             "select id, name, description"
             " from dataset"
         )).fetchall():
+
+            # fetch total bgc
+            total_bgc = cur.execute((
+                "select count(id)"
+                " from bgc"
+                " where dataset_id=?"
+            ), (ds_id, )).fetchall()[0][0]
+
+            # fetch total genome
+            total_genome = cur.execute((
+                "select count(distinct orig_folder)"
+                " from bgc"
+                " where dataset_id=?"
+                " and orig_folder not like ''"
+            ), (ds_id, )).fetchall()[0][0]
+
             result["data"].append([
                 ds_name,
-                0,
-                0,
+                total_genome,
+                total_bgc,
                 ds_desc
             ])
 
