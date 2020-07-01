@@ -6,7 +6,7 @@ conf = {
     "instance_folder": path.join(
         path.dirname(__file__), "..", "..", "instance"
     ),
-    "example_query_id": "bacteria-7595694e-09aa-4fc3-8902-59e6d11c1a4a"
+    "example_query_id": "bacteria-70dadcb9-3a1c-477a-96c3-6f2300de8565"
 }
 
 conf["db_path"] = path.join(conf["instance_folder"], "result", "data.db")
