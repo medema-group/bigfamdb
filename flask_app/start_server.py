@@ -17,6 +17,23 @@ from app.controllers import about, help_me, feedback
 
 
 def create_flask_app():
+
+    # check databases
+    jobs_db = conf["jobs_db_path"]
+    if not path.exists(jobs_db):
+        print("creating jobs db ({})...".format(jobs_db))
+        with sqlite3.connect(jobs_db) as con:
+            cur = con.cursor()
+            schema_sql = path.join(
+                path.dirname(__file__),
+                "..",
+                "query_processor",
+                "jobs_schema.sql"
+            )
+            with open(schema_sql, "r") as sql_script:
+                cur.executescript(sql_script.read())
+                con.commit()
+
     # initiate app
     app = Flask(
         __name__,
