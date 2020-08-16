@@ -11,12 +11,12 @@ from sys import argv
 from app.config import conf
 
 # import controllers
-from app.controllers import root, home, dataset, run
+from app.controllers import root, api, home, dataset, run
 from app.controllers import bgc, gcf, query, stats
 from app.controllers import about, help_me, feedback
 
 
-def create_flask_app():
+def bigfam():
 
     # check databases
     jobs_db = conf["jobs_db_path"]
@@ -45,6 +45,7 @@ def create_flask_app():
 
     # register controllers
     app.register_blueprint(root.blueprint)
+    app.register_blueprint(api.blueprint)
     app.register_blueprint(home.blueprint)
     app.register_blueprint(dataset.blueprint)
     app.register_blueprint(run.blueprint)
@@ -118,10 +119,10 @@ if __name__ == "__main__":
 
         bigfamdb_app = DispatcherMiddleware(
             create_dummy_app(argv[2]), {
-                "/" + argv[2]: create_flask_app()
+                "/" + argv[2]: bigfam()
             })
     else:
-        bigfamdb_app = create_flask_app()
+        bigfamdb_app = bigfam()
 
     run_simple(
         hostname="0.0.0.0",

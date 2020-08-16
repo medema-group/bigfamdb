@@ -16,3 +16,9 @@
 .popover {
     max-width: 100% !important;
 }
+
+/* overriding tagsinput */
+.tt-menu {
+	max-height: 10em;
+    overflow-y: auto;
+}

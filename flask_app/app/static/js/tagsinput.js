@@ -357,6 +357,7 @@
         }
 
         $.fn.typeahead.apply(self.$input, typeaheadjs).on('typeahead:selected', $.proxy(function (obj, datum, name) {
+          /*
           var index = 0;
           typeaheadjs.some(function(dataset, _index) {
             if (dataset.name === name) {
@@ -371,8 +372,8 @@
             self.add(datum[typeaheadjs[index].valueKey]);
           } else {
             self.add(datum);
-          }
-
+          }*/
+          self.add(datum); // needed for the temporary bugfix
           self.$input.typeahead('val', '');
         }, self));
       }

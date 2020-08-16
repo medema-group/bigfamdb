@@ -56,7 +56,7 @@
                         <strong>Taxon</strong>
                     </div>
                     <div class="col-7 border-top-0 list-group-item">
-                        <input type="text" disabled="disabled" data-role="tagsinput" id="filter-taxa" placeholder="Type taxa names" />
+                        <input type="text" id="filter-taxa" placeholder="Type first four-letters" />
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -129,6 +129,25 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+        $('#filter-taxa').tagsinput({
+          itemValue: "id", // needed for the temporary bugfix
+          itemText: "name", // needed for the temporary bugfix
+          typeaheadjs: {
+            displayKey: 'name', // needed for the temporary bugfix
+            valueKey: 'id', // needed for the temporary bugfix
+            name: 'taxons',
+            limit: 999999999999, // needed for the temporary bugfix
+            source: function(query, sync, async) {
+                if (query.length >= 4) {
+                   $.getJSON("{{ url_for('root.page') }}api/autocomplete_taxon/?q=" + query, function(data) {
+                      async(data);
+                   });
+               }
+            }
+          }
+        });
+    
 		$("#submit_filter").click(function(){
 			$('#table_bgcs').DataTable().ajax.reload();
 		});
@@ -142,17 +161,22 @@
 				url: "{{ url_for('root.page') }}api/dataset/get_bgc_table",
 				type: "GET",
 				data: function(d) {
-					d["dataset_id"] = $(".filter-ds:checked").map(function(){
-					    return $(this).val()
-					}).get();
-					d["chem_class_id"] = $(".filter-bc:checked").map(function(){
-					    return $(this).val()
-					}).get();
+					if ($(".filter-ds:not(:checked)").length > 0) {
+						d["dataset_id"] = $(".filter-ds:checked").map(function(){
+						    return $(this).val()
+						}).get();
+					}
+					if ($(".filter-bc:not(:checked)").length > 0) {
+						d["chem_class_id"] = $(".filter-bc:checked").map(function(){
+						    return $(this).val()
+						}).get();
+					}
 					d["length_nt_from"] = $("#filter-nt_length-from").val();
 					d["length_nt_to"] = $("#filter-nt_length-to").val();
 					if ($("#filter-complete_only").prop("checked")) {
 						d["complete_only"] = true;
 					}
+					d["taxons"] = $("#filter-taxa").val();
 				}
 			},
 			"columnDefs": [
