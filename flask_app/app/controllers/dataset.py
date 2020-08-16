@@ -120,7 +120,6 @@ def get_bgc_table():
         if len(hmm_ids) > 0:
             selector_froms += ",bgc_features"
             selector_wheres += " and bgc_features.bgc_id=bgc.id"
-            selector_wheres += " and bgc_features.value>=255"
             selector_wheres += " and bgc_features.hmm_id in ({})".format(
                 ",".join(map(str, hmm_ids)))
 
