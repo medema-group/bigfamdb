@@ -37,3 +37,29 @@ def get_taxons():
         return json.dumps(result)
     else:
         return abort(403)
+
+
+# note: this assumes there is only one hmm_db_id
+@blueprint.route("/api/autocomplete_hmm/")
+def get_hmms():
+    keyword = request.args.get('q', type=str, default="")
+
+    if len(keyword) >= 4:
+        with sqlite3.connect(conf["db_path"]) as con:
+            cur = con.cursor()
+
+            result = []
+
+            for hmm_id, hmm_name in cur.execute((
+                "select id, name"
+                " from hmm"
+                " where name like ?"
+                " order by name asc"
+            ), ("%" + keyword + "%", )).fetchall():
+                result.append({
+                    "id": hmm_id,
+                    "name": hmm_name
+                })
+        return json.dumps(result)
+    else:
+        return abort(403)

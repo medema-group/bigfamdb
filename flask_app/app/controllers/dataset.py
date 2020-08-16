@@ -75,6 +75,8 @@ def get_bgc_table():
     chem_class_ids = list(map(int, request.args.getlist('chem_class_id[]')))
     taxon_ids = [int(i) for i in request.args.get(
         'taxons', type=str).split(",") if len(i) > 0]
+    hmm_ids = [int(i) for i in request.args.get(
+        'hmms', type=str).split(",") if len(i) > 0]
     length_nt_from = request.args.get(
         "length_nt_from", default=None, type=int)
     length_nt_to = request.args.get(
@@ -115,6 +117,12 @@ def get_bgc_table():
             selector_wheres += " and bgc_taxonomy.bgc_id=bgc.id"
             selector_wheres += " and bgc_taxonomy.taxon_id in ({})".format(
                 ",".join(map(str, taxon_ids)))
+        if len(hmm_ids) > 0:
+            selector_froms += ",bgc_features"
+            selector_wheres += " and bgc_features.bgc_id=bgc.id"
+            selector_wheres += " and bgc_features.value>=255"
+            selector_wheres += " and bgc_features.hmm_id in ({})".format(
+                ",".join(map(str, hmm_ids)))
 
         # fetch total records (all bgcs in the dataset)
         result["recordsTotal"] = cur.execute((

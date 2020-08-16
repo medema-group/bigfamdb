@@ -67,7 +67,7 @@
                         <strong>Domains</strong>
                     </div>
                     <div class="col-7 border-top-0 list-group-item">
-                        <input type="text" disabled="disabled" data-role="tagsinput" id="filter-domains" placeholder="Type pHMM names" />
+                        <input type="text" id="filter-domains" placeholder="Type first four-letters" />
                     </div>
                     <div class="col-1"></div>
                 </div>
@@ -148,6 +148,24 @@
           }
         });
     
+        $('#filter-domains').tagsinput({
+          itemValue: "id", // needed for the temporary bugfix
+          itemText: "name", // needed for the temporary bugfix
+          typeaheadjs: {
+            displayKey: 'name', // needed for the temporary bugfix
+            valueKey: 'id', // needed for the temporary bugfix
+            name: 'domains',
+            limit: 999999999999, // needed for the temporary bugfix
+            source: function(query, sync, async) {
+                if (query.length >= 4) {
+                   $.getJSON("{{ url_for('root.page') }}api/autocomplete_hmm/?q=" + query, function(data) {
+                      async(data);
+                   });
+               }
+            }
+          }
+        });
+    
 		$("#submit_filter").click(function(){
 			$('#table_bgcs').DataTable().ajax.reload();
 		});
@@ -177,6 +195,7 @@
 						d["complete_only"] = true;
 					}
 					d["taxons"] = $("#filter-taxa").val();
+					d["hmms"] = $("#filter-domains").val();
 				}
 			},
 			"columnDefs": [
