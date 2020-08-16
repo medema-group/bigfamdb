@@ -49,7 +49,8 @@
 					searching: false,
 					ordering:  false,
 					serverSide: true,
-					responsive: true,
+					responsive: false,
+					processing: true,
 					ajax: {
 						url: "{{ url_for('root.page') }}api/query/detail/get_gcf_hits_table",
 						type: "GET",
@@ -161,6 +162,7 @@
 			searching: false,
 			ordering:  false,
 			serverSide: true,
+			processing: true,
 			scrollX: true,
 			ajax: {
 				url: "{{ url_for('root.page') }}api/gcf/get_member_list_arower",

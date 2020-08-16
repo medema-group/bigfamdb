@@ -27,8 +27,9 @@
 		$("#table_queries").DataTable({
 			searching: false,
 			ordering:  false,
-			responsive: true,
+			responsive: false,
 			serverSide: true,
+			processing: true,
 			ajax: {
 				url: "{{ url_for('root.page') }}api/query/bgc_list",
 				type: "GET",

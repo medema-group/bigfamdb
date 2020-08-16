@@ -86,7 +86,8 @@
 						searching: false,
 						ordering:  false,
 						serverSide: true,
-						responsive: true,
+						responsive: false,
+						processing: true,
 						ajax: {
 							url: "{{ url_for('root.page') }}api/bgc/get_genes_table",
 							type: "GET",
