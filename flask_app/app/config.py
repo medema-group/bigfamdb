@@ -10,6 +10,7 @@ conf = {
 }
 
 conf["db_path"] = path.join(conf["instance_folder"], "result", "data.db")
+conf["precalc_db_path"] = path.join(conf["instance_folder"], "precalculated.db")
 conf["jobs_db_path"] = path.join(conf["instance_folder"], "bigfam_jobs.db")
 conf["reports_folder"] = path.join(conf["instance_folder"], "reports")
 conf["reports_db_path"] = path.join(conf["reports_folder"], "reports.db")

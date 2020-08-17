@@ -89,6 +89,11 @@ def get_bgc_table():
     with sqlite3.connect(conf["db_path"]) as con:
         cur = con.cursor()
 
+        # load precalculated db
+        cur.execute((
+            "attach database ? as precalc"
+        ), (conf["precalc_db_path"], ))
+
         # get selector for bgcs (based only on bgc table)
         selector_froms = ""
         selector_wheres = "1"
@@ -118,9 +123,9 @@ def get_bgc_table():
             selector_wheres += " and bgc_taxonomy.taxon_id in ({})".format(
                 ",".join(map(str, taxon_ids)))
         if len(hmm_ids) > 0:
-            selector_froms += ",bgc_features"
-            selector_wheres += " and bgc_features.bgc_id=bgc.id"
-            selector_wheres += " and bgc_features.hmm_id in ({})".format(
+            selector_froms += ",precalc.bgc_domains as bd"
+            selector_wheres += " and bd.bgc_id=bgc.id"
+            selector_wheres += " and bd.hmm_id in ({})".format(
                 ",".join(map(str, hmm_ids)))
 
         # fetch total records (all bgcs in the dataset)
@@ -153,8 +158,10 @@ def get_bgc_table():
             " from bgc,dataset where bgc.id in ("
             " select distinct(bgc.id) from bgc{}"
             " where {}"
+            " order by bgc.dataset_id, bgc.orig_folder, bgc.name asc"
             " limit ? offset ?)"
             " and dataset.id=bgc.dataset_id"
+            " order by bgc.dataset_id, bgc.orig_folder, bgc.name asc"
         ).format(selector_froms, selector_wheres),
                 (limit, offset)).fetchall():
             (bgc_id, dataset_id, dataset_name,
