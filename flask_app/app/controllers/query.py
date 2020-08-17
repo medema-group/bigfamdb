@@ -777,6 +777,11 @@ def detail_get_gcf_hits_table():
         with sqlite3.connect(db_query_path) as con_query:
             cur_query = con_query.cursor()
 
+            # load precalculated db
+            cur_source.execute((
+                "attach database ? as precalc"
+            ), (conf["precalc_db_path"], ))
+
             # set clustering id and threshold
             clustering_id, threshold = cur_source.execute(
                 ("select id, threshold"
@@ -816,63 +821,48 @@ def detail_get_gcf_hits_table():
                 " limit ? offset ?"
             ), (bgc_id, limit, offset)).fetchall():
 
-                # fetch gcf accession
-                gcf_accession = cur_source.execute((
-                    "select id_in_run"
-                    " from gcf"
-                    " where id=?"
-                ), (gcf_id, )).fetchall()[0][0]
+                gcf_accession, core_members, \
+                    putative_members = cur_source.execute((
+                        "select gcf.id_in_run"
+                        ", precalc.gcf_summary.core_members"
+                        ", precalc.gcf_summary.putative_members"
+                        " from gcf,precalc.gcf_summary"
+                        " where precalc.gcf_summary.gcf_id=gcf.id"
+                        " and gcf.id=?"
+                    ), (gcf_id, )).fetchall()[0]
 
                 # fetch gcf name
                 gcf_name = "GCF_{:0{width}d}".format(
                     gcf_accession, width=math.ceil(
                         math.log10(result["totalGCFrun"])))
 
-                # fetch core members count
-                core_members = cur_source.execute(
-                    (
-                        "select count(bgc_id)"
-                        " from gcf_membership"
-                        " where gcf_id=?"
-                        " and rank=0"
-                        " and membership_value <= ?"
-                    ),
-                    (gcf_id, threshold)).fetchall()[0][0]
-
                 # fetch classes counts
                 class_counts = cur_source.execute(
                     (
                         "select chem_class.name || ':' || chem_subclass.name"
-                        " as chem_class,"
-                        " count(gcf_membership.bgc_id) as bgc"
-                        " from chem_class, chem_subclass,"
-                        " bgc_class, gcf_membership"
-                        " where gcf_membership.gcf_id=?"
-                        " and gcf_membership.bgc_id=bgc_class.bgc_id"
-                        " and bgc_class.chem_subclass_id=chem_subclass.id"
+                        ", gcf_subclass.count"
+                        " from chem_class, chem_subclass"
+                        ", precalc.gcf_summary_class as gcf_subclass"
+                        " where gcf_subclass.gcf_id=?"
+                        " and gcf_subclass.chem_subclass_id=chem_subclass.id"
                         " and chem_subclass.class_id=chem_class.id"
-                        " and rank=0"
-                        " and membership_value <= ?"
-                        " group by chem_class"
-                        " order by bgc desc"
+                        " order by gcf_subclass.count desc"
                     ),
-                    (gcf_id, threshold)).fetchall()
+                    (gcf_id, )).fetchall()
 
                 # fetch taxon counts
                 taxon_counts = cur_source.execute(
                     (
-                        "select taxon.name as taxon,"
-                        " count(gcf_membership.bgc_id) as bgc"
-                        " from taxon, bgc_taxonomy, gcf_membership"
-                        " where gcf_membership.gcf_id=?"
-                        " and gcf_membership.bgc_id=bgc_taxonomy.bgc_id"
-                        " and bgc_taxonomy.taxon_id=taxon.id"
+                        "select taxon.name as taxon"
+                        ", gcf_taxon.count"
+                        " from taxon"
+                        ", precalc.gcf_summary_taxon as gcf_taxon"
+                        " where gcf_taxon.gcf_id=?"
+                        " and gcf_taxon.taxon_id=taxon.id"
                         " and taxon.level=5"  # genus
-                        " and membership_value <= ?"
-                        " group by taxon"
-                        " order by bgc desc"
+                        " order by gcf_taxon.count desc"
                     ),
-                    (gcf_id, threshold)).fetchall()
+                    (gcf_id, )).fetchall()
 
                 result["data"].append([
                     membership_value,
