@@ -17,8 +17,15 @@
     max-width: 100% !important;
 }
 
+/* overriding datatables */
+
+.dataTables_processing {
+    background-color: #ff9b9b;
+    font-weight: bold;
+}
+
 /* overriding tagsinput */
 .tt-menu {
-	max-height: 10em;
+    max-height: 10em;
     overflow-y: auto;
 }
