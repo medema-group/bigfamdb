@@ -1,11 +1,105 @@
 <div class="row mt-2 mb-4">
 	<div class="col">
-		<div class="row d-none">
+		<div class="row">
 			<div class="col">
-				<h3>Search:</h3>
-				<div class="col">
-					(.. here will be the search forms ..)
-				</div>
+				<h3>Filter</h3>
+                <!-- first row -->
+                <div class="row mt-4 list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-3 list-group-item">
+                        <strong>Dataset</strong>
+                        <div>
+                            (
+                            <a href="javascript:void();" onclick="$('.filter-ds').prop('checked', true)">select all</a>
+                            |
+                            <a href="javascript:void();" onclick="$('.filter-ds').prop('checked', false)">clear all</a>
+                            )
+                        </div>
+                    </div>
+                    <div class="col-7 list-group-item">
+                        {% for ds_id, ds_name in datasets_list %}
+                            <span class="d-inline-flex pr-3 form-check">
+                                <input type="checkbox" checked="checked" class="form-check-input filter-ds" value="{{ ds_id }}" />
+                                <label class="form-check-label" for="filter-ds-{{ ds_id }}">{{ ds_name }}</label>
+                            </span>
+                        {% endfor %}
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!-- second row -->
+                <div class="row list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-3 border-top-0 list-group-item">
+                        <strong>BGC class</strong>
+                        <div>
+                            (
+                            <a href="javascript:void();" onclick="$('.filter-bc').prop('checked', true)">select all</a>
+                            |
+                            <a href="javascript:void();" onclick="$('.filter-bc').prop('checked', false)">clear all</a>
+                            )
+                        </div>
+                    </div>
+                    <div class="col-7 border-top-0 list-group-item">
+                        {% for class_id, class_name in classes_list %}
+                            <span class="d-inline-flex pr-3 form-check">
+                                <input type="checkbox"checked="checked" class="form-check-input filter-bc" value="{{ class_id }}" />
+                                <label class="form-check-label" for="filter-bc-{{ class_id }}">{{ class_name }}</label>
+                            </span>
+                        {% endfor %}
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!-- third row -->
+                <div class="row list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-3 border-top-0 list-group-item">
+                        <strong>Taxon</strong>
+                        <a href="javascript:void();" class="badge badge-info badge-pill ml-2" data-toggle="popover" data-trigger="hover" data-html="true" data-content="Apply OR filters. When used alongside 'Domains' filtering, may cause timeout; make sure to select a narrower taxonomy range (i.e. species/genus level) in that case." title="Note">&nbsp;?&nbsp;</a>
+                    </div>
+                    <div class="col-7 border-top-0 list-group-item">
+                        <input type="text" id="filter-taxa" placeholder="Type first four-letters" />
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!-- fourth row -->
+                <div class="row list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-3 border-top-0 list-group-item">
+                        <strong>Domains</strong>
+                        <a href="javascript:void();" class="badge badge-info badge-pill ml-2" data-toggle="popover" data-trigger="hover" data-html="true" data-content="Apply OR filters, will capture domains shared by ~80% member BGCs. When used alongside 'Taxon' filtering, may cause timeout; make sure to select a narrower taxonomy range (i.e. species/genus level) in that case." title="Note">&nbsp;?&nbsp;</a>
+                    </div>
+                    <div class="col-7 border-top-0 list-group-item">
+                        <input type="text" id="filter-domains" placeholder="Type first four-letters" />
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!-- fifth row -->
+                <div class="row list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-3 border-top-0 list-group-item">
+                        <strong>Misc.</strong>
+                    </div>
+                    <div class="col-7 border-top-0 list-group-item">
+                    	<ul class="list-group panel">
+                    		<li class="border list-group-item">
+                    			<strong>BGC counts</strong>
+                                from
+                    			<input type="text" id="filter-core_members-from" class="col-2 text-right" placeholder="-" /> to
+                    			<input type="text" id="filter-core_members-to" class="col-2 text-right" placeholder="-" />
+                                <a href="javascript:void();" class="badge badge-info badge-pill ml-2" data-toggle="popover" data-trigger="hover" data-html="true" data-content="Only counting core members" title="Note">&nbsp;?&nbsp;</a>
+                    		</li>
+                    	</ul>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+                <!-- last row -->
+                <div class="row list-group list-group-horizontal">
+                    <div class="col-1"></div>
+                    <div class="col-10 border-top-0 list-group-item text-right">
+                        <button type="button" id="submit_filter" class="btn btn-info">Apply</button>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
 			</div>
 		</div>
 		<div class="row mt-4">
@@ -38,6 +132,47 @@
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+        $('#filter-taxa').tagsinput({
+          itemValue: "id", // needed for the temporary bugfix
+          itemText: "name", // needed for the temporary bugfix
+          typeaheadjs: {
+            displayKey: 'name', // needed for the temporary bugfix
+            valueKey: 'id', // needed for the temporary bugfix
+            name: 'taxons',
+            limit: 999999999999, // needed for the temporary bugfix
+            source: function(query, sync, async) {
+                if (query.length >= 4) {
+                   $.getJSON("{{ url_for('root.page') }}api/autocomplete_taxon/?q=" + query, function(data) {
+                      async(data);
+                   });
+               }
+            }
+          }
+        });
+    
+        $('#filter-domains').tagsinput({
+          itemValue: "id", // needed for the temporary bugfix
+          itemText: "name", // needed for the temporary bugfix
+          typeaheadjs: {
+            displayKey: 'name', // needed for the temporary bugfix
+            valueKey: 'id', // needed for the temporary bugfix
+            name: 'domains',
+            limit: 999999999999, // needed for the temporary bugfix
+            source: function(query, sync, async) {
+                if (query.length >= 4) {
+                   $.getJSON("{{ url_for('root.page') }}api/autocomplete_hmm/?q=" + query, function(data) {
+                      async(data);
+                   });
+               }
+            }
+          }
+        });
+    
+		$("#submit_filter").click(function(){
+			$('#table_gcfs').DataTable().ajax.reload();
+		});
+
 		$("#table_gcfs").DataTable({
 			searching: false,
 			ordering:  false,
@@ -47,8 +182,22 @@
 			ajax: {
 				url: "{{ url_for('root.page') }}api/run/get_gcf_table",
 				type: "GET",
-				data: {
-					"run_id": $("#run_id").val()
+				data: function(d) {
+					d["run_id"] = $("#run_id").val();
+					if ($(".filter-ds:not(:checked)").length > 0) {
+						d["dataset_id"] = $(".filter-ds:checked").map(function(){
+						    return $(this).val()
+						}).get();
+					}
+					if ($(".filter-bc:not(:checked)").length > 0) {
+						d["chem_class_id"] = $(".filter-bc:checked").map(function(){
+						    return $(this).val()
+						}).get();
+					}
+					d["core_members_from"] = $("#filter-core_members-from").val();
+					d["core_members_to"] = $("#filter-core_members-to").val();
+					d["taxons"] = $("#filter-taxa").val();
+					d["hmms"] = $("#filter-domains").val();
 				}
 			},
 			"columnDefs": [

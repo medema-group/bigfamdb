@@ -27,13 +27,33 @@ def page_run(run_id):
         page_title = "Gene Cluster Families (GCFs)"
         page_subtitle = ("")
 
+    # for filtering
+    with sqlite3.connect(conf["db_path"]) as con:
+        cur = con.cursor()
+
+        # datasets
+        datasets_list = cur.execute((
+            "select id, name"
+            " from dataset"
+            " order by name"
+        )).fetchall()
+
+        # bgc classes
+        classes_list = cur.execute((
+            "select id, name"
+            " from chem_class"
+            " order by name"
+        )).fetchall()
+
     # render view
     return render_template(
         "run/main.html.j2",
         run_id=run_id,
         status_id=status_id,
         page_title=page_title,
-        page_subtitle=page_subtitle
+        page_subtitle=page_subtitle,
+        datasets_list=datasets_list,
+        classes_list=classes_list
     )
 
 
@@ -46,6 +66,16 @@ def get_gcf_table():
     # translate request parameters
     run_id = request.args.get('run_id', default=0, type=int)
     result["run_id"] = run_id
+    dataset_ids = list(map(int, request.args.getlist('dataset_id[]')))
+    chem_class_ids = list(map(int, request.args.getlist('chem_class_id[]')))
+    taxon_ids = [int(i) for i in request.args.get(
+        'taxons', type=str).split(",") if len(i) > 0]
+    hmm_ids = [int(i) for i in request.args.get(
+        'hmms', type=str).split(",") if len(i) > 0]
+    core_members_from = request.args.get(
+        "core_members_from", default=None, type=int)
+    core_members_to = request.args.get(
+        "core_members_to", default=None, type=int)
     offset = request.args.get('start', type=int)
     limit = request.args.get('length', type=int)
 
@@ -56,6 +86,57 @@ def get_gcf_table():
         cur.execute((
             "attach database ? as precalc"
         ), (conf["precalc_db_path"], ))
+
+        # get selector for bgcs (based only on bgc table)
+        selector_froms = ""
+        selector_wheres = "1"
+        if isinstance(core_members_from, int) or \
+                isinstance(core_members_to, int):
+            selector_froms += ",precalc.gcf_summary"
+            selector_wheres += (
+                " and precalc.gcf_summary.gcf_id=gcf.id"
+            )
+            if isinstance(core_members_from, int):
+                selector_wheres += (
+                    " and precalc.gcf_summary.core_members>={}"
+                ).format(core_members_from)
+            if isinstance(core_members_to, int):
+                selector_wheres += (
+                    " and precalc.gcf_summary.core_members<={}"
+                ).format(core_members_to)
+        if len(dataset_ids) > 0:
+            selector_froms += ",precalc.gcf_summary_dataset"
+            selector_wheres += (
+                " and precalc.gcf_summary_dataset.gcf_id=gcf.id"
+                " and precalc.gcf_summary_dataset.count>0"
+                " and precalc.gcf_summary_dataset.dataset_id in ({})"
+            ).format(
+                ",".join(map(str, dataset_ids)))
+        if len(chem_class_ids) > 0:
+            selector_froms += ",precalc.gcf_summary_class"
+            selector_froms += ",chem_subclass as gs_sub"
+            selector_wheres += (
+                " and precalc.gcf_summary_class.gcf_id=gcf.id"
+                " and precalc.gcf_summary_class.count>0"
+                " and precalc.gcf_summary_class.chem_subclass_id=gs_sub.id"
+                " and gs_sub.class_id in ({})"
+            ).format(
+                ",".join(map(str, chem_class_ids)))
+        if len(taxon_ids) > 0:
+            selector_froms += ",precalc.gcf_summary_taxon"
+            selector_wheres += (
+                " and precalc.gcf_summary_taxon.gcf_id=gcf.id"
+                " and precalc.gcf_summary_taxon.count>0"
+                " and precalc.gcf_summary_taxon.taxon_id in ({})"
+            ).format(
+                ",".join(map(str, taxon_ids)))
+        if len(hmm_ids) > 0:
+            selector_froms += ",precalc.gcf_domains"
+            selector_wheres += (
+                " and precalc.gcf_domains.gcf_id=gcf.id"
+                " and precalc.gcf_domains.hmm_id in ({})"
+            ).format(
+                ",".join(map(str, hmm_ids)))
 
         # set clustering id and threshold
         clustering_id, threshold = cur.execute(
@@ -74,9 +155,11 @@ def get_gcf_table():
 
         # fetch total records (filtered)
         result["recordsFiltered"] = cur.execute(
-            ("select count(id)"
-             " from gcf"
-             " where clustering_id=?"),
+            (
+                "select count(distinct gcf.id)"
+                " from gcf{}"
+                " where clustering_id=? and {}"
+            ).format(selector_froms, selector_wheres),
             (clustering_id,)).fetchall()[0][0]
 
         # get max gcf id
@@ -89,13 +172,14 @@ def get_gcf_table():
             ", precalc.gcf_summary.putative_members"
             " from gcf,precalc.gcf_summary"
             " where gcf.id in ("
-            " select id"
-            "  from gcf"
-            "  where clustering_id=?"
+            " select distinct gcf.id"
+            "  from gcf{}"
+            "  where clustering_id=? and {}"
             "  limit ? offset ?"
             " )"
             " and precalc.gcf_summary.gcf_id=gcf.id"
-        ), (clustering_id, limit, offset)).fetchall():
+        ).format(selector_froms, selector_wheres), (
+                clustering_id, limit, offset)).fetchall():
             gcf_id, gcf_accession, core_members, putative_members = row
 
             gcf_name = "GCF_{:0{width}d}".format(
