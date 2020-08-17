@@ -87,8 +87,9 @@ def get_gcf_table():
             "attach database ? as precalc"
         ), (conf["precalc_db_path"], ))
 
-        # get selector for bgcs (based only on bgc table)
+        # get selector for gcfs (based only on gcf table)
         selector_froms = ""
+        selector_joins = ""
         selector_wheres = "1"
         if isinstance(core_members_from, int) or \
                 isinstance(core_members_to, int):
@@ -131,12 +132,13 @@ def get_gcf_table():
             ).format(
                 ",".join(map(str, taxon_ids)))
         if len(hmm_ids) > 0:
-            selector_froms += ",precalc.gcf_domains"
-            selector_wheres += (
-                " and precalc.gcf_domains.gcf_id=gcf.id"
-                " and precalc.gcf_domains.hmm_id in ({})"
-            ).format(
-                ",".join(map(str, hmm_ids)))
+            for hmm_id in hmm_ids:
+                selector_joins += (
+                    " inner join (select gcf_id,hmm_id"
+                    " from precalc.gcf_domains"
+                    " where hmm_id={}) as bd_{}"
+                    " on bd_{}.gcf_id=gcf.id"
+                ).format(hmm_id, hmm_id, hmm_id)
 
         # set clustering id and threshold
         clustering_id, threshold = cur.execute(
@@ -158,8 +160,9 @@ def get_gcf_table():
             (
                 "select count(distinct gcf.id)"
                 " from gcf{}"
+                " {}"
                 " where clustering_id=? and {}"
-            ).format(selector_froms, selector_wheres),
+            ).format(selector_froms, selector_joins, selector_wheres),
             (clustering_id,)).fetchall()[0][0]
 
         # get max gcf id
@@ -174,11 +177,12 @@ def get_gcf_table():
             " where gcf.id in ("
             " select distinct gcf.id"
             "  from gcf{}"
+            " {}"
             "  where clustering_id=? and {}"
             "  limit ? offset ?"
             " )"
             " and precalc.gcf_summary.gcf_id=gcf.id"
-        ).format(selector_froms, selector_wheres), (
+        ).format(selector_froms, selector_joins, selector_wheres), (
                 clustering_id, limit, offset)).fetchall():
             gcf_id, gcf_accession, core_members, putative_members = row
 

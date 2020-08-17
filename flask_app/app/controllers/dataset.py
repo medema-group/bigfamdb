@@ -96,6 +96,7 @@ def get_bgc_table():
 
         # get selector for bgcs (based only on bgc table)
         selector_froms = ""
+        selector_joins = ""
         selector_wheres = "1"
         if isinstance(length_nt_from, int):
             selector_wheres += " and bgc.length_nt>={}".format(
@@ -123,10 +124,9 @@ def get_bgc_table():
             selector_wheres += " and bgc_taxonomy.taxon_id in ({})".format(
                 ",".join(map(str, taxon_ids)))
         if len(hmm_ids) > 0:
-            selector_froms += ",precalc.bgc_domains as bd"
-            selector_wheres += " and bd.bgc_id=bgc.id"
-            selector_wheres += " and bd.hmm_id in ({})".format(
-                ",".join(map(str, hmm_ids)))
+            for hmm_id in hmm_ids:
+                selector_joins += " inner join (select bgc_id,hmm_id from precalc.bgc_domains where hmm_id={}) as bd_{} on bd_{}.bgc_id=bgc.id".format(
+                    hmm_id, hmm_id, hmm_id)
 
         # fetch total records (all bgcs in the dataset)
         result["recordsTotal"] = cur.execute((
@@ -137,8 +137,9 @@ def get_bgc_table():
         result["recordsFiltered"] = cur.execute((
             "select count(distinct bgc.id)"
             " from bgc{}"
+            " {}"
             " where {}"
-        ).format(selector_froms, selector_wheres)).fetchall()[0][0]
+        ).format(selector_froms, selector_joins, selector_wheres)).fetchall()[0][0]
 
         # fetch taxonomy descriptor
         result["taxon_desc"] = cur.execute((
@@ -157,12 +158,13 @@ def get_bgc_table():
             ",length_nt,on_contig_edge"
             " from bgc,dataset where bgc.id in ("
             " select distinct(bgc.id) from bgc{}"
+            " {}"
             " where {}"
             " order by bgc.dataset_id, bgc.orig_folder, bgc.name asc"
             " limit ? offset ?)"
             " and dataset.id=bgc.dataset_id"
             " order by bgc.dataset_id, bgc.orig_folder, bgc.name asc"
-        ).format(selector_froms, selector_wheres),
+        ).format(selector_froms, selector_joins, selector_wheres),
                 (limit, offset)).fetchall():
             (bgc_id, dataset_id, dataset_name,
              genome, name, length, fragmented) = row
