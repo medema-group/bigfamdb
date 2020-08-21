@@ -96,8 +96,9 @@ def page_view(job_id):
     # fetch query status
     with sqlite3.connect(conf["jobs_db_path"]) as con:
         cur = con.cursor()
-        status, status_name, submitted = cur.execute((
-            "select status, status_enum.name, submitted"
+        status, status_name, submitted, started, finished = cur.execute((
+            "select status, status_enum.name"
+            ", submitted, started, finished"
             " from jobs, status_enum"
             " where jobs.name like ?"
             " and status_enum.code=jobs.status"
@@ -150,6 +151,8 @@ def page_view(job_id):
         status=status,
         status_name=status_name,
         submitted=submitted,
+        started=started,
+        finished=finished,
         report_id=report_id,
         run_id=run_id,
         clustering_id=clustering_id,
