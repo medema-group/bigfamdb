@@ -5,8 +5,12 @@
 		<div class="row mt-4 list-group list-group-horizontal">
 			<div class="col-1"></div>
 			<div class="col-7 list-group-item d-flex justify-content-between align-items-center">
-				Original file:
-				<a id="bgc_overview_orig_file" href="javascript:void();" class="badge badge-secondary badge-pill">?</a>
+				Links:
+                <span>
+                    {% for text, link in linkages %}
+                    <a target="_blank" class="btn btn-info" href="{{ link }}">{{ text }}</a>
+                    {% endfor %}
+                </span>
 			</div>
 			<div class="col-3 list-group-item d-flex justify-content-between align-items-center">
 				Fragmented?
@@ -84,7 +88,6 @@
 			},
 			dataType: "json",
 			success: function(response) {
-				$("#bgc_overview_orig_file").text(response["file_path"]);
 				$("#bgc_overview_fragmented").text(response["fragmented"]);
 				$("#bgc_overview_bgc_length").text(response["length"]);
 				$("#bgc_overview_num_genes").text(response["genes_count"]);

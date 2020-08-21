@@ -31,6 +31,32 @@ def page_bgc(dataset_id, bgc_id, run_id):
     with sqlite3.connect(conf["db_path"]) as con:
         cur = con.cursor()
 
+        # load linkages
+        cur.execute((
+            "attach database ? as linkage"
+        ), (conf["linkage_db_path"], ))
+        linkages = []
+        for mibig_acc, in cur.execute((
+            "select mibig_acc"
+            " from linkage_mibig"
+            " where bgc_id=?"
+        ), (bgc_id, )).fetchall():
+            url_mibig = (
+                "https://mibig.secondarymetabolites.org"
+                "/repository/{}/"
+            ).format(mibig_acc)
+            linkages.append(("MIBiG", url_mibig))
+        for nuccore_acc, start_loc, end_loc in cur.execute((
+            "select nuccore_acc, start_loc, end_loc"
+            " from linkage_ncbi"
+            " where bgc_id=?"
+        ), (bgc_id, )).fetchall():
+            url_ncbi = (
+                "https://www.ncbi.nlm.nih.gov/"
+                "nuccore/{}?from={}&to={}"
+            ).format(nuccore_acc, start_loc, end_loc)
+            linkages.append(("NCBI", url_ncbi))
+        
         # redirect if run_id/dataset_id == 0
         redir = False
         if dataset_id < 1:
@@ -113,6 +139,7 @@ def page_bgc(dataset_id, bgc_id, run_id):
     return render_template(
         "bgc/main.html.j2",
         bgc_id=bgc_id,
+        linkages=linkages,
         dataset_id=dataset_id,
         run_id=run_id,
         run_ids=run_ids,
