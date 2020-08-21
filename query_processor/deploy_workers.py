@@ -52,7 +52,7 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                     cur = con.cursor()
                     cur.execute((
                         "update jobs"
-                        " set status=?, started=?,"
+                        " set status=?, finished=?,"
                         " comment=?"
                         " where name like ?"
                     ), (-1, datetime.now(), "unknown_as_type", name))
@@ -89,7 +89,7 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                     cur = con.cursor()
                     cur.execute((
                         "update jobs"
-                        " set status=?, started=?,"
+                        " set status=?, finished=?,"
                         " comment=?"
                         " where name like ?"
                     ), (-1, datetime.now(), "download_failed", name))
@@ -102,9 +102,9 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                     cur = con.cursor()
                     cur.execute((
                         "update jobs"
-                        " set status=?, started=?"
+                        " set status=?"
                         " where name like ?"
-                    ), (2, datetime.now(), name))
+                    ), (2, name))
                     con.commit()
                 is_failed = False
 
@@ -127,7 +127,7 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                 cur = con.cursor()
                 cur.execute((
                     "update jobs"
-                    " set status=?, started=?"
+                    " set status=?, finished=?"
                     " where name like ?"
                 ), (3, datetime.now(), name))
                 con.commit()
@@ -137,7 +137,7 @@ def deploy_jobs(pending, jobs_db, instance_folder, num_threads):
                 cur = con.cursor()
                 cur.execute((
                     "update jobs"
-                    " set status=?, started=?,"
+                    " set status=?, finished=?,"
                     " comment=?"
                     " where name like ?"
                 ), (-1, datetime.now(), "query_failed", name))
