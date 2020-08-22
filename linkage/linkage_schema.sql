@@ -21,3 +21,10 @@ CREATE TABLE IF NOT EXISTS linkage_mibig (
 	mibig_acc VARCHAR(16) NOT NULL,
 	UNIQUE(bgc_id)
 );
+
+CREATE TABLE IF NOT EXISTS linkage_study (
+	dataset_id INTEGER NOT NULL,
+	name VARCHAR(100) NOT NULL,
+	doi VARCHAR(100) NOT NULL,
+	UNIQUE(dataset_id)
+);

@@ -36,6 +36,15 @@ def page_bgc(dataset_id, bgc_id, run_id):
             "attach database ? as linkage"
         ), (conf["linkage_db_path"], ))
         linkages = []
+        for name, doi in cur.execute((
+            "select name, doi"
+            " from linkage_study"
+            " where dataset_id=?"
+        ), (dataset_id, )).fetchall():
+            url_study = (
+                "https://doi.org/{}"
+            ).format(doi)
+            linkages.append((name, url_study))
         for mibig_acc, in cur.execute((
             "select mibig_acc"
             " from linkage_mibig"
