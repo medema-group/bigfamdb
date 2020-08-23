@@ -68,14 +68,14 @@ def page_help():
             )
         ),
         (
-            "How is BiG-FAM related to antiSMASH, MIBiG, BiG-SCAPE and BiG-SLICE?",
+            "How is BiG-FAM related to antiSMASH, MIBiG, BiG-SCAPE and BiG-SLiCE?",
             (
                 "MIBiG is a database of BGCs of known functions whereas antiSMASH"
                 " identifies BGCs, BiG-SCAPE and BiG-SLiCE group them into GCFs."
-                " BiG-SCAPE uses sequence similarity networking (which is"
-                " considerably slower, but provides interactive network outputs)"
-                ", while BiG-SLiCE uses a vectorization approach (which is much"
-                " faster, but somewhat less sensitive)."
+                " BiG-SCAPE uses sequence similarity networking (network-based,"
+                " slower but more sensitive in capturing copy number variations, protein similarity and synteny)"
+                ", while BiG-SLiCE uses a vectorization approach (much"
+                " faster, but currently lacks sensitivity for some classes i.e. RiPPs)."
             )
         ),
         (
