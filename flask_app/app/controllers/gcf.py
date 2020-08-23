@@ -2,11 +2,13 @@
 
 import sqlite3
 from flask import render_template, request, redirect
-from flask import abort
+from flask import abort, make_response
 import json
 import math
 from os import path
 from typing import List
+from io import StringIO
+import csv
 
 # import global config
 from ..config import conf
@@ -595,3 +597,95 @@ def get_member_ids():
             ])
 
         return result
+
+
+@blueprint.route("/api/gcf/get_member_links")
+def get_member_links():
+    """ output tab separated of member BGC links """
+    result = {}
+
+    # translate request parameters
+    gcf_id = request.args.get('gcf_id', type=int)
+    
+    with sqlite3.connect(conf["db_path"]) as con:
+        cur = con.cursor()
+
+        # load linkages
+        cur.execute((
+            "attach database ? as linkage"
+        ), (conf["linkage_db_path"], ))
+        
+        # make tsv
+        tsv_list = [["#BGC_ID", "BGC_NAME", "RADIUS", "MIBIG_URL", "NCBI_URL", "ASDB_URL"]]
+        
+        # fetch threshold
+        threshold = cur.execute((
+            "select threshold"
+            " from gcf,clustering"
+            " where gcf.clustering_id=clustering.id"
+            " and gcf.id=?"
+        ), (gcf_id, )).fetchall()[0][0]
+        
+        for bgc_id,bgc_name,radius,mibig_acc,\
+            ncbi_acc,ncbi_start,ncbi_end,\
+            asdb_acc,asdb_start,asdb_end in cur.execute((
+            "select bgc.id,bgc.name,"
+            " gcf_membership.membership_value"
+            ", linkage_mibig.mibig_acc"
+            ", linkage_ncbi.nuccore_acc"
+            ", linkage_ncbi.start_loc"
+            ", linkage_ncbi.end_loc"
+            ", linkage_antismashdb.nuccore_acc"
+            ", linkage_antismashdb.start_loc"
+            ", linkage_antismashdb.end_loc"
+            " from bgc,gcf_membership"
+            " left join linkage.linkage_mibig"
+            " on linkage_mibig.bgc_id=bgc.id"
+            " left join linkage.linkage_ncbi"
+            " on linkage_ncbi.bgc_id=bgc.id"
+            " left join linkage.linkage_antismashdb"
+            " on linkage_antismashdb.bgc_id=bgc.id"
+            " where bgc.id=gcf_membership.bgc_id"
+            " and gcf_membership.rank=0"
+            " and gcf_membership.membership_value<=?"
+            " and gcf_membership.gcf_id=?"
+            " order by gcf_membership.membership_value asc"
+        ), (threshold, gcf_id)).fetchall():
+            if mibig_acc:
+                url_mibig = (
+                    "https://mibig.secondarymetabolites.org"
+                    "/repository/{}/"
+                ).format(mibig_acc)
+            else:
+                url_mibig = "n/a"
+            if ncbi_acc:
+                url_ncbi = (
+                    "https://www.ncbi.nlm.nih.gov/"
+                    "nuccore/{}?from={}&to={}"
+                ).format(ncbi_acc, ncbi_start, ncbi_end)
+            else:
+                url_ncbi = "n/a"
+            if asdb_acc:
+                url_asdb = (
+                    "https://www.ncbi.nlm.nih.gov/"
+                    "nuccore/{}?from={}&to={}"
+                ).format(asdb_acc, asdb_start, asdb_end)
+            else:
+                url_asdb = "n/a"
+                
+            tsv_list.append([
+                bgc_id,
+                bgc_name,
+                radius,
+                url_mibig,
+                url_ncbi,
+                url_asdb
+            ])
+            
+        si = StringIO()
+        cw = csv.writer(si, delimiter='\t')
+        cw.writerows(tsv_list)
+        output = make_response(si.getvalue())
+        output.headers["Content-Disposition"] = "attachment; filename=gcf_export.tsv"
+        output.headers["Content-type"] = "text/tsv"
+        return output

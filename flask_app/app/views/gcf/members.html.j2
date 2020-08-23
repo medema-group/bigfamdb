@@ -3,6 +3,9 @@
 		<h3>
 			Members
 			<button id="table_arrowers-showbtn" type="button" class="btn btn-sm btn-info">view BGC arrowers</button>
+			<a href="{{ url_for('root.page') }}api/gcf/get_member_links?gcf_id={{ gcf_id }}">
+                <button type="button" class="btn btn-sm btn-info">export BGC list</button>
+            </a>
 		</h3>
 	</div>
 	<div id="table_arrowers-hidden_container" class="d-none">
