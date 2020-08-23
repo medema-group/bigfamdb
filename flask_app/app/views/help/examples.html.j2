@@ -1,0 +1,62 @@
+<div class="row mt-2 mb-4">
+	<div class="col">
+		<h3 name="help_examples">
+			Example use cases
+		</h3>
+		<div id="example_accordion" class="mt-4 mb-4">
+            <div class="card mb-2">
+                <div class="btn card-header text-left" id="headingOne" data-toggle="collapse" data-target="#example_accordion-q1" aria-expanded="true" aria-controls="collapseOne">
+                  <strong>
+                      Exploring rhantipeptides BGC diversity
+                  </strong>
+                </div>
+                <div id="example_accordion-q1" class="collapse hide" aria-labelledby="headingOne" data-parent="#example_accordion">
+                  <div class="card-body">
+                      <p>
+                      Rhantipeptides (previously known as "SCIFF peptides") are non-bacteriocin post-translationally modified peptides (RiPPs) prevalent in the genus Clostridia (<a href='https://dx.doi.org/10.1128%2FJB.00040-11' target='_blank'>ref</a>), although GC-content analysis indicated that their genes might be horizontally-transferred (<a href='https://pubs.acs.org/doi/10.1021/jacs.9b01519' target='_blank'>ref</a>). Recent analysis shows that these peptides played an important role in regulating cell population, i.e. via quorum sensing mechanism (<a href='https://onlinelibrary.wiley.com/doi/abs/10.1002/biot.202000136' target='_blank'>ref</a>). During our previous effort in charting the global diversity of 1.2 million BGCs, we captured a large group (6,800) of putative rhantipeptide BGCs with diverse patterns of gene neighborhoods flanking the precursor peptides (<a href='https://doi.org/10.1101/2020.08.17.240838' target='_blank'>ref</a>).
+                      </p>
+                      <p>
+To explore this diversity, we can use BiG-FAM’s "GCF search" function and use the two signature domains of this BGC class (AS-TIGR03973 and Radical_SAM) as query baits (Panel A). The search result shows 79 GCFs, each representing a distinct pattern of the BGCs and their distribution across the taxonomy (Panel B). By clicking on the link to each GCF’s detail page, we will be provided the information about the taxonomy, nucleotide length, calculated radius and biosynthetic features shared by BGCs within the GCF (Panel C). Furthermore, a comparative multi-genes visualization of those BGCs provides an all-in-one view on the diversity of gene neighborhoods flanking the rhantipeptide precursor genes (Panel D).
+</p>
+                      <figure class="figure">
+                          <img src="{{ url_for('static', filename='img/help_example_1.jpg') }}" class="figure-img img-fluid rounded" />
+                          <figcaption class="figure-caption text-justify">
+                          <strong>A.</strong> By clicking on the "GCF" page link (box 1) from the main menu, users will be provided an interface to search GCF based on multiple criteria, in this case we search for "bacterial GCFs harboring AS-TIGR03973 and Radical_SAM biosynthetic domains in at least ~80% of their BGCs" (box 2). <strong>B.</strong> After applying the filter function (box 3), BiG-FAM returned a list of 79 GCFs satisfying the criteria. <strong>C.</strong> Clicking on the "view" button of a GCF (box 4) will take users to a detail page that shows several statistics related to the GCF’s taxonomy, length, and features (domains) distribution. <strong>D.</strong> In the GCF detail page, users may also choose to view an "arrower" visualization of the BGCs (box 5), which in this case shows the occurrence of neighboring biosynthetic genes (depicted in colored arrows) flanking the queried cysteine-rich precursor + rSAM gene pairs (blue boxes).
+                          </figcaption>
+                        </figure>
+                  </div>
+                </div>
+              </div>
+            <div class="card mb-2">
+                <div class="btn card-header text-left" id="headingOne" data-toggle="collapse" data-target="#example_accordion-q2" aria-expanded="true" aria-controls="collapseOne">
+                  <strong>
+                      GCF analysis on a newly sequenced <i>Streptomyces</i>
+                  </strong>
+                </div>
+                <div id="example_accordion-q2" class="collapse hide" aria-labelledby="headingOne" data-parent="#example_accordion">
+                  <div class="card-body">
+                      <p>
+                      Recently, a draft genome has been published (<a href='https://link.springer.com/10.1007/s00203-020-01913-z' target='_blank'>ref</a>) for Streptomyces tunisialbus, a new streptomycete species isolated from the rhizospheric soil of lavender plants (Lavandula officinalis) in Tunisia (<a href='https://pubmed.ncbi.nlm.nih.gov/29464542/' target='_blank'>ref</a>).
+                      </p>
+                      <p>
+                      To showcase how BiG-FAM can be used to assess biosynthetic novelty and capture distant relationships of newly sequenced BGCs, we downloaded the assembled genome from ENA (accession: <a href='https://www.ebi.ac.uk/ena/browser/view/OKRJ01' target='_blank'>OKRJ01</a>) and uploaded it to <a href='https://antismash.secondarymetabolites.org' target='_blank'>antiSMASH web server</a>, returning a unique job id ("bacteria/fungi-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx") which (after the run is done) can then directly be used to perform GCF analysis in BiG-FAM (Panel A). The entire analysis for the 36 antiSMASH-predicted BGCs was completed in less than a minute, resulting in a summary table of the best BGC-to-GCF hit pairs (Panel B).
+                      </p>
+                      <p>
+                      One interesting BGC in this genome is the complete, 46.5 kilobase-pair long Type-I PKS protocluster from "Region 15.1", which shows an overall low hit rate both in its ClusterBlast and KnownClusterBlast results. A quick look at the GCF analysis result for the BGC shows a significant hit only to one singleton GCF (Panel C), which after a follow-up inspection turned out to be coming from the NCBI-submitted entry of the same genome (accession: <a href='https://www.ncbi.nlm.nih.gov/assembly/GCA_900290435.1/' target='_blank'>GCA_900290435.1</a>), suggesting the novelty of the PKS BGC in question.
+                      </p>
+                      <p>
+                      Another useful feature is the "tracking" of biosynthetic domains of the query BGC across hundreds to thousands of distant BGCs, showing the domain architectural similarity shared between the genes (Panel D).
+                      </p>
+                      
+                        <figure class="figure">
+                          <img src="{{ url_for('static', filename='img/help_example_2.jpg') }}" class="figure-img img-fluid rounded" />
+                          <figcaption class="figure-caption text-justify">
+                          <strong>A.</strong> When users clicked on the "Query" section of the main menu (box 1), they will be an input form to put a finished <a href='https://antismash.secondarymetabolites.org' target='_blank'>antiSMASH</a> or <a href='https://fungismash.secondarymetabolites.org' target='_blank'>fungiSMASH</a> job id in. After pressing "Submit", BiG-FAM will immediately execute (or put into queue) the downloading, preprocessing and GCF matching of all BGCs (i.e. regions) included in the submitted run. <strong>B.</strong> A list will then be shown with the summary of all best BGC-to-GCF pairings, with distance lower than 900 (original threshold value) highlighted in green, depicting a good match to at least one GCF in the database. A particular query BGC, "Region 15.1" was selected for a detailed look (box 3) as mentioned in the main text. <strong>C.</strong> A list of five best-matching GCFs and their model’s distances to the query BGC, showing an exact match (d=0) to a singleton GCF from Streptomyces (GCF_24649, box 4) which turned out to be the same BGC from the same genome. Looking at the visualization of the second closest GCF on the list (GCF_06303 with d = 1,609, box 5), we can see <strong>D.</strong> co-occurrence of protein domains across the distantly related BGCs, where some similar but non-identical PKS genes (longest multi-domain gene in each GCF) seems to act as an "anchor" that defines the GCF. While this group of anchor genes have similar domain architecture to the PKS gene of the queried BGC (box 6), a quick BLASTp analysis against one example gene (box 7) shows only 52.63% similarity, suggesting that the BGC does not actually belong to the GCF.
+                          </figcaption>
+                        </figure>
+                  </div>
+                </div>
+              </div>
+		</div>
+	</div>
+</div>

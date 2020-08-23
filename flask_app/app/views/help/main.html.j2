@@ -1,7 +1,7 @@
 {% extends "layout.html.j2" %}
 {% block content %}
 	{% include "basic_header.html.j2" %}
-	<div class="col-12 text-secondary mt-2">
+	<div class="col-12 text-secondary mt-2 mb-4">
 		Do you have a question regarding or related to the database?
 		Feel free to <a href='mailto:satria.kautsar@wur.nl,marnix.medema@wur.nl?subject=[BiG-FAM HELP]&body=Dear BiG-SLiCE maintainers,'>
 	    drop us an e-mail</a> (please put <strong>
@@ -11,5 +11,7 @@
 	     to see if your question is already answered there.
 	 </div>
 	<!-- FAQs -->
+	{% include "help/purpose.html.j2" %}
+	{% include "help/examples.html.j2" %}
 	{% include "help/faq.html.j2" %}
 {% endblock %}
