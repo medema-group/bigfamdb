@@ -58,6 +58,27 @@ def page_help():
             )
         ),
         (
+            "How do I search for BGCs or GCFs with certain characteristics (protein domains, taxonomy, etc.)?",
+            (
+                "By clicking ‘GCFs’ or ‘BGCs’ in the menu on the left,"
+                " you can view the BiG-FAM data by GCF or by BGC,"
+                " respectively. On the top of the page, several ways"
+                " are provided to filter/search the data, which will"
+                " be performed when you click ‘Apply’."
+            )
+        ),
+        (
+            "How is BiG-FAM related to antiSMASH, MIBiG, BiG-SCAPE and BiG-SLICE?",
+            (
+                "MIBiG is a database of BGCs of known functions whereas antiSMASH"
+                " identifies BGCs, BiG-SCAPE and BiG-SLiCE group them into GCFs."
+                " BiG-SCAPE uses sequence similarity networking (which is"
+                " considerably slower, but provides interactive network outputs)"
+                ", while BiG-SLiCE uses a vectorization approach (which is much"
+                " faster, but somewhat less sensitive)."
+            )
+        ),
+        (
             "Can I set up a copy of this database on my own (local) servers?",
             (
                 "Yes. Just follow the instruction provided in the"
@@ -70,6 +91,18 @@ def page_help():
                 "https://github.com/medema-group/bigfamdb/",
                 "https://github.com/medema-group/bigfamdb/",
                 "https://www.gnu.org/licenses/gpl-3.0.en.html",
+            )
+        ),
+        (
+            "What is the privacy policy of antiSMASH concerning the sequence data used for query mode?",
+            (
+                "The data submission uses the antiSMASH server, where the submitted data are"
+                " temporarily stored. It thus follows the same privacy policy as antiSMASH."
+                " We try to keep this site and the data that it analyzes as safe and secure"
+                " as possible. Your output files will be deleted from the antiSMASH server"
+                " within one month. However, sending your data to the web site is at your"
+                " own risk. If you are concerned about the sensitivity of your data, please"
+                " make your own local copy of the data and use BIG-SLiCE for querying."
             )
         ),
         (
