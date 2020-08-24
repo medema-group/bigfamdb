@@ -65,6 +65,16 @@ def page_bgc(dataset_id, bgc_id, run_id):
                 "nuccore/{}?from={}&to={}"
             ).format(nuccore_acc, start_loc, end_loc)
             linkages.append(("NCBI", url_ncbi))
+        for nuccore_acc, start_loc, end_loc in cur.execute((
+            "select nuccore_acc, start_loc, end_loc"
+            " from linkage_antismashdb"
+            " where bgc_id=?"
+        ), (bgc_id, )).fetchall():
+            url_asdb = (
+                "https://antismash-db.secondarymetabolites"
+                ".org/area.html?record={}&start={}&end={}"
+            ).format(nuccore_acc, start_loc, end_loc)
+            linkages.append(("antiSMASH-DB", url_asdb))
         
         # redirect if run_id/dataset_id == 0
         redir = False

@@ -667,8 +667,8 @@ def get_member_links():
                 url_ncbi = "n/a"
             if asdb_acc:
                 url_asdb = (
-                    "https://www.ncbi.nlm.nih.gov/"
-                    "nuccore/{}?from={}&to={}"
+                    "https://antismash-db.secondarymetabolites"
+                    ".org/area.html?record={}&start={}&end={}"
                 ).format(asdb_acc, asdb_start, asdb_end)
             else:
                 url_asdb = "n/a"
